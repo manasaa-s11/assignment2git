@@ -1,36 +1,16 @@
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
-import postgres from 'postgres';
-
-export const sql = postgres(process.env.POSTGRES_URL!, {
-  ssl: 'allow'
-});
 
 const nextConfig: NextConfig = {
-  pageExtensions: ['mdx', 'ts', 'tsx'],
-  async redirects() {
-    if (!process.env.POSTGRES_URL) {
-      return [];
-    }
-
-    let redirects = await sql`
-      SELECT source, destination, permanent
-      FROM redirects;
-    `;
-
-    return redirects.map(({ source, destination, permanent }) => ({
-      source,
-      destination,
-      permanent: !!permanent
-    }));
+  output: 'export', // <--- This forces Next.js to build static HTML files for GitHub Pages
+  images: {
+    unoptimized: true, // Required for static exports
   },
-  // Note: Using the Rust compiler means we cannot use
-  // rehype or remark plugins. If you need them, remove
-  // the `experimental.mdxRs` flag.
+  pageExtensions: ['mdx', 'ts', 'tsx'],
   experimental: {
     mdxRs: { mdxType: 'gfm' }
   }
- };
+};
 
 const withMDX = createMDX({});
 
