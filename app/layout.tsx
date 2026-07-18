@@ -23,19 +23,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    
-      
-        
+    <html lang="en">
+      <body className={inter.className}>
+        <main style={{ padding: '2rem' }}>
           {children}
-          
-            {links.map((link) => (
-              
-                {link.name}
-              
-            ))}
-          
+        </main>
         
-      
-    
+        <footer style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
+          {links.map((link) => (
+            <a 
+              key={link.name} 
+              href={link.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ textTransform: 'capitalize' }}
+            >
+              {link.name}
+            </a>
+          ))}
+        </footer>
+      </body>
+    </html>
   );
 }
